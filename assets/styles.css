@@ -1,0 +1,110 @@
+/* PONS · Livro, Método, Ecossistema 2P
+   Fundo: imagem original de cada slide, sem texto. Texto novo por cima.
+   Duas famílias: Nasalization (títulos, em curvas SVG com traço) e Open Sans (todo o resto).
+   Palco fixo de 1920x1080 que escala inteiro. Dentro dele não há media query de layout. */
+
+@font-face{font-family:"Open Sans";font-weight:400;font-style:normal;font-display:swap;src:url(fonts/open-sans-400-normal.woff2) format("woff2")}
+@font-face{font-family:"Open Sans";font-weight:400;font-style:italic;font-display:swap;src:url(fonts/open-sans-400-italic.woff2) format("woff2")}
+@font-face{font-family:"Open Sans";font-weight:600;font-style:normal;font-display:swap;src:url(fonts/open-sans-600-normal.woff2) format("woff2")}
+@font-face{font-family:"Open Sans";font-weight:700;font-style:normal;font-display:swap;src:url(fonts/open-sans-700-normal.woff2) format("woff2")}
+
+:root{
+  --ink:#0f1215; --ink-2:#2b3238; --mute:#59636a;
+  --cyan:#14b4c9; --cyan-ink:#0b9db4;
+  --ease:cubic-bezier(.2,.7,.1,1);
+  --body:"Open Sans",system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#07090b;overflow:hidden;font-family:var(--body);color:var(--ink);-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+
+#stage{position:absolute;left:0;top:0;width:1920px;height:1080px;transform-origin:0 0;overflow:hidden;background:#e9ecee}
+
+/* ---------- slides ---------- */
+.slide{position:absolute;inset:0;overflow:hidden;opacity:0;visibility:hidden;transition:opacity .6s ease,visibility 0s .6s}
+.slide.on{opacity:1;visibility:visible;transition:opacity .6s ease,visibility 0s}
+.slide.leaving{visibility:visible}
+.bgimg{position:absolute;left:0;top:0;width:1920px;height:1080px;display:block;transform:scale(1.035);transition:transform 7s var(--ease)}
+.slide.on .bgimg{transform:none}
+
+/* ---------- títulos Nasalization (SVG com traço) ---------- */
+.t{position:absolute;line-height:1;white-space:nowrap}
+.nt{display:block;overflow:visible}
+.nt path.k{fill:#0e1215;stroke:#0e1215} .nt path.c{fill:var(--cyan);stroke:var(--cyan)} .nt path.w{fill:#fff;stroke:#fff}
+.nt rect.k{fill:#0e1215} .nt rect.c{fill:var(--cyan)} .nt rect.w{fill:#fff}
+
+/* ---------- texto em Open Sans (tamanho e posição ajustados por deck.js) ---------- */
+.tx{position:absolute;white-space:nowrap;font-weight:400;color:#15191c;line-height:1.35;visibility:hidden}
+.fitted .tx{visibility:visible}
+.tx.c{text-align:center}
+.tx b{font-weight:700}
+.tx .cy{color:var(--cyan-ink);font-weight:700}
+.tx.it{font-style:italic;color:#2b3238}
+.tx.hdr{font-weight:600;letter-spacing:.3em;color:#1a1f23}
+.tx.hdr.inv{color:#fff}
+.tx.strap{letter-spacing:.42em;color:#2b3238}
+.tx.role{letter-spacing:.3em;color:#4a545b}
+.tx.who{display:flex;align-items:center;gap:.7em;letter-spacing:.05em}
+.tx.who .sb{font-weight:600}
+.tx.who .vb{display:block;width:2px;height:1.2em;background:var(--cyan)}
+.tx.lead{color:#2b3238}
+.tx.st{font-weight:600;color:#111}
+.tx.d{color:#23292e}
+.tx.s{color:#2b3238}
+.tx.quote{color:#2b3238}
+.tx.quote7,.tx.quote8,.tx.h9,.tx.h9b,.tx.c1{font-weight:700;color:#111}
+.tx.chain{font-weight:600;letter-spacing:.02em;color:#111}
+.tx.num{font-weight:700}
+.tx.li{color:#2b3238}
+.tx.c2{color:#2b3238}
+.tx.ct{color:#111}
+.tx.s10{color:#15191c}
+
+/* ---------- livro ---------- */
+.book{position:absolute;left:217px;top:60px;height:930px;width:auto;filter:drop-shadow(0 28px 34px rgba(15,18,21,.35))}
+
+/* ---------- vetores ---------- */
+.fx{position:absolute;left:0;top:0;width:1920px;height:1080px;pointer-events:none;overflow:visible}
+path.d,line.d{stroke-dasharray:1;stroke-dashoffset:1}
+.on path.d,.on line.d{animation:draw 1.4s var(--ease) var(--d,0s) both}
+@keyframes draw{to{stroke-dashoffset:0}}
+.on .a-fade{animation-name:fade}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+.on .a-pop{animation-name:pop;animation-duration:.6s}
+@keyframes pop{from{opacity:0;transform:scale(.4)}60%{transform:scale(1.15)}to{opacity:1;transform:none}}
+
+/* ---------- animações ---------- */
+.a{opacity:0}
+.on .a,.leaving .a{animation-duration:.9s;animation-timing-function:var(--ease);animation-delay:var(--d,0s);animation-fill-mode:both}
+.on .a-rise,.leaving .a-rise{animation-name:rise}
+.on .a-wipe,.leaving .a-wipe{animation-name:wipe;animation-duration:.85s}
+@keyframes rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+@keyframes wipe{from{opacity:1;clip-path:inset(-10% 100% -10% -2%);transform:translateX(-18px)}to{opacity:1;clip-path:inset(-10% -3% -10% -2%);transform:none}}
+
+@media (prefers-reduced-motion:reduce){
+  .a{opacity:1!important;animation:none!important;clip-path:none!important}
+  path.d,line.d{stroke-dashoffset:0!important;animation:none!important}
+  .slide,.slide.on{transition:none}
+  .bgimg,.slide.on .bgimg{transform:none;transition:none}
+}
+
+/* ---------- navegação (fora do palco) ---------- */
+.nav{position:fixed;left:0;right:0;bottom:0;height:56px;display:flex;align-items:center;justify-content:center;gap:18px;
+  opacity:0;transition:opacity .35s;pointer-events:none;color:#fff;font-family:var(--body);font-size:14px;font-weight:600;letter-spacing:.12em;
+  background:linear-gradient(0deg,rgba(7,9,11,.78),transparent)}
+body.ui .nav{opacity:1;pointer-events:auto}
+.nav button{width:36px;height:36px;border-radius:50%;border:1px solid rgba(255,255,255,.35);display:grid;place-items:center;font-size:18px;line-height:1}
+.nav button svg{width:18px;height:18px;display:block;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.nav button:hover,.nav button:focus-visible{background:var(--cyan);border-color:var(--cyan);color:#06181c;outline:none}
+.nav .dots{display:flex;gap:8px}
+.nav .dots i{width:26px;height:4px;background:rgba(255,255,255,.28);cursor:pointer;transition:background .3s}
+.nav .dots i.on{background:var(--cyan)}
+.progress{position:fixed;left:0;top:0;height:3px;background:var(--cyan);width:0;transition:width .5s var(--ease);z-index:5}
+
+/* ---------- revelação por passos (slide 7) ---------- */
+.slide .stp:not(.rev){visibility:hidden!important}
+
+/* passos do slide 7: o texto entra suave quando a pista chega ao nó */
+.slide .stp.tx,.slide .stp.t{--d:1.5s!important;animation-duration:1.1s}
+.slide .stp[data-step="1"].tx,.slide .stp[data-step="1"].t{--d:.2s!important}
+.slide .stp .d{animation-timing-function:cubic-bezier(.45,.05,.25,1)}
